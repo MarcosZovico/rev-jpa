@@ -24,7 +24,7 @@ public abstract class GenericDao<T extends Serializable> {
 		EntityManager manager = getEntityManager();
 		manager.getTransaction().begin();
 
-		Query query = manager.createNamedQuery("select count(c) from " + aClass.getSimpleName() + " c");
+		Query query = manager.createQuery("select count(c) from " + aClass.getSimpleName() + " c");
 
 		long count = (Long) query.getSingleResult();
 

@@ -10,7 +10,7 @@ public class JpaUtil {
 	private static JpaUtil instance;
 
 	private JpaUtil() {
-		this.factory = Persistence.createEntityManagerFactory("RAVJPA");
+		this.factory = Persistence.createEntityManagerFactory("REVJPA");
 	}
 
 	public static synchronized JpaUtil getInstance() {

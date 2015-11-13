@@ -9,9 +9,9 @@
 		<property name="javax.persistence.jdbc.user" value="root"/>
 		<property name="javax.persistence.jdbc.password" value="root"/>
 		
-		<property name="hibernat.dialect" value="hibernate.dialect.MySql5Dialect"/>
-		<property name="hibernat.show_sql" value="true"/>
-		<property name="hibernat.hbm2dll.auto" value="update"/>
+		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+		<property name="hibernate.show_sql" value="true"/>
+		<property name="hibernate.hbm2ddl.auto" value="update" />
 	</properties>
 	</persistence-unit>
 </persistence>
