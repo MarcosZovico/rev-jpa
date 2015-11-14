@@ -1,17 +1,25 @@
 package com.msouza.revjpa.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PERSONS", indexes = {@Index(columnList = "FIRST_NAME, LAST_NAME", name = "IDX_PERSON_NAME", unique = true) })
+@Table(name = "PERSONS", indexes = {
+		@Index(columnList = "FIRST_NAME, LAST_NAME", name = "IDX_PERSON_NAME", unique = true) })
 public class Person implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -29,6 +37,27 @@ public class Person implements Serializable {
 
 	@Column(name = "AGE", nullable = false)
 	private Integer age;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "DOCUMENT_ID")
+	private Document document;
+
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Phone> phones = new ArrayList<Phone>();
+
+	public void addPhone(Phone phone) {
+		if (phones == null) {
+			phones = new ArrayList<Phone>();
+		}
+		phone.setPerson(this);
+		phones.add(phone);
+	}
+	
+	public void removePhone(Phone phone) {
+		if (phones != null) {
+			phones.remove(phone);
+		}
+	}
 
 	public Long getId() {
 		return id;
@@ -62,6 +91,22 @@ public class Person implements Serializable {
 		this.age = age;
 	}
 
+	public Document getDocument() {
+		return document;
+	}
+
+	public void setDocument(Document document) {
+		this.document = document;
+	}
+
+	public List<Phone> getPhones() {
+		return phones;
+	}
+
+	public void setPhones(List<Phone> phones) {
+		this.phones = phones;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -89,7 +134,8 @@ public class Person implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age + "]";
+		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age
+				+ ", document=" + document + "]";
 	}
 
 }
