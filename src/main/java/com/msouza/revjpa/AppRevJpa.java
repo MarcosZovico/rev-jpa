@@ -1,13 +1,17 @@
 package com.msouza.revjpa;
 
+import java.util.Arrays;
 import java.util.List;
 
+import com.msouza.revjpa.dao.AddressDao;
 import com.msouza.revjpa.dao.DocumentDao;
 import com.msouza.revjpa.dao.PersonDao;
 import com.msouza.revjpa.dao.PhoneDao;
+import com.msouza.revjpa.entity.Address;
 import com.msouza.revjpa.entity.Document;
 import com.msouza.revjpa.entity.Person;
 import com.msouza.revjpa.entity.Phone;
+import com.msouza.revjpa.entity.Address.TypeAddres;
 import com.msouza.revjpa.entity.Phone.TypePhone;
 
 public class AppRevJpa {
@@ -31,7 +35,63 @@ public class AppRevJpa {
 		// insertPhoneByPerson();
 		// updatePhone();
 		// updatePhoneByPerson();
-		deleteOnCascade();
+		// deleteOnCascade();
+
+//		insertAddressByPerson();
+//		insertPersonByAddress();
+		findByCity();
+		
+
+	}
+
+	private static void findByCity() {
+		List<Address> addresses = new AddressDao().findByCity("Porto Alegre");
+		
+		for (Address address : addresses) {
+			System.out.println(address.toString());
+		}
+		
+	}
+
+	private static void insertPersonByAddress() {
+		Person person = new PersonDao().findById(5L);
+		
+		Address ad1 = new  Address();
+		ad1.setCity("Porto Alegre");
+		ad1.setStreet("Av Beira rio, 102");
+		ad1.setType(TypeAddres.RESIDENCIAL);
+		ad1.setPersons(Arrays.asList(person));
+		
+		AddressDao dao = new AddressDao();
+		dao.save(ad1);
+		System.out.println(dao.findById(ad1.getId()));
+		
+	}
+
+	private static void insertAddressByPerson() {
+		Address ad1 = new Address();
+
+		ad1.setCity("Porto Alegre");
+		ad1.setStreet("Av Beira rio, 102");
+		ad1.setType(TypeAddres.RESIDENCIAL);
+
+		Address ad2 = new Address();
+		ad2.setCity("Porto Alegre");
+		ad2.setStreet("Av Floresta, 36");
+		ad2.setType(TypeAddres.COMERCIAL);
+		
+		Person person = new Person();
+		person.setFirstName("Isabel");
+		person.setLastName("Martins");
+		person.setAge(23);
+		person.setDocument(new Document("973.283.456-09", 193456534));
+		person.addPhone(new Phone(TypePhone.RESIDENCIAL, "4456730"));
+		person.addPhone(new Phone(TypePhone.COMERCIAL, "4554430"));
+		person.setAddresses(Arrays.asList(ad1,ad2));
+		
+		new PersonDao().save(person);
+		
+		System.out.println(new PersonDao().findById(person.getId()));
 
 	}
 
